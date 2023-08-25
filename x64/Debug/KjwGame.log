@@ -1,2 +1,5 @@
-﻿  KjwGame.cpp
+﻿  Source.cpp
+C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(10,8): warning C4804: '<=': unsafe use of type 'bool' in operation
+C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(10,24): warning C4804: '<=': unsafe use of type 'bool' in operation
+C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(10,40): warning C4804: '<=': unsafe use of type 'bool' in operation
   KjwGame.vcxproj -> C:\Users\Administrator\Desktop\김주완1\KJWgame\x64\Debug\KjwGame.exe

@@ -124,7 +124,7 @@ void ShowCurrentState(char mine_table[][X_COUNT], char check_table[][X_COUNT])
 			if (check_table[y][x]) 
 				printf("%c", mine_table[y][x]);
 			else
-				printf("@");
+				printf("°·");
 		}
 		printf("\n"); // ¡Ÿ πŸ≤ﬁ
 	}
