@@ -2,10 +2,47 @@
 #include <stdlib.h>
 #include <time.h>
 #include <memory.h>
+#include <windows.h>
 
 #define MINE_COUNT 7
 #define X_COUNT 6
 #define Y_COUNT 6
+
+
+
+INPUT_RECORD rec;
+DWORD dwNOER;
+HANDLE CIN = 0;
+
+void click(int* xx, int* yy, int* lr) {
+	while (1)
+	{
+		ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), &rec, 1, &dwNOER); // 콘솔창 입력을 받아들임.
+		if (rec.EventType == MOUSE_EVENT) {// 마우스 이벤트일 경우
+
+			if (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) { // 좌측 버튼이 클릭되었을 경우
+				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X값 받아옴
+				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y값 받아옴
+
+				*xx = mouse_x; //x값을 넘김
+				*yy = mouse_y; //y값을 넘김
+				*lr = 1; //마우스 클릭상태를 넘김
+
+				break;
+			}
+			else if (rec.Event.MouseEvent.dwButtonState & RIGHTMOST_BUTTON_PRESSED) { // 우측 버튼이 클릭되었을 경우
+				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X값 받아옴
+				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y값 받아옴
+
+				*xx = mouse_x; //x값을 넘김
+				*yy = mouse_y; //y값을 넘김
+				*lr = 2; //마우스 클릭상태를 넘김
+
+				break;
+			}
+		}
+	}
+}
 
 void CreateMineTable(char mine_table[][X_COUNT], char check_table[][X_COUNT])
 {
@@ -148,21 +185,30 @@ int main()
 	// 선택 정보를 반영하여 지뢰 정보를 출력
 	// @ 문자로 출력된 것은 아직 확인이 안된 항목
 	ShowCurrentState(mine_table, check_table);
+	
+	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
+	//마우스 입력모드로 바꿈
+	DWORD mode;
+	CIN = GetStdHandle(STD_INPUT_HANDLE); //마우스 재활성화
+	GetConsoleMode(CIN, &mode);
+	SetConsoleMode(CIN, mode | ENABLE_MOUSE_INPUT);
+	int xx, yy, lr;
 
-	int x, y;
+	
+
+	int x = 0;
+	int y =0;
 	while (1)
 	{
 		printf("확인할 위치의 x, y좌표를 입력하세요.\n");
 		printf("음수를 입력하면 게임이 종료됩니다.\n");
 		printf("x 좌표 입력 : ");
-		scanf_s("%d", &x);
+		click(&xx, &yy, &lr);
+		printf("%2d %2d %2d\n", xx, yy, lr);
 		// 음수가 입력되었으면 게임을 종료
-		if (x < 0) break;
 
 		printf("y 좌표 입력 : ");
-		scanf_s("%d", &y);
 		// 음수가 입력되었으면 게임 종료
-		if (y < 0) break;
 
 		// 위치 정보를 제대로 입력했는지 확인
 		if (x < X_COUNT && y < Y_COUNT)
@@ -190,7 +236,7 @@ int main()
 		else printf("잘못된 위치를 입력했습니다.\n\n");
 	}
 
-	// 설치 정보를 확인
+	 // 설치 정보를 확인
 	ShowMineTable(mine_table);
 
 
