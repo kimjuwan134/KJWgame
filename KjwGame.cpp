@@ -183,11 +183,12 @@ int main()
 	CreateMineTable(mine_table, check_table);
 	
 	// 선택 정보를 반영하여 지뢰 정보를 출력
-	// @ 문자로 출력된 것은 아직 확인이 안된 항목
+	// ■ 문자로 출력된 것은 아직 확인이 안된 항목
 	ShowCurrentState(mine_table, check_table);
 	
 	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
 	//마우스 입력모드로 바꿈
+
 	DWORD mode;
 	CIN = GetStdHandle(STD_INPUT_HANDLE); //마우스 재활성화
 	GetConsoleMode(CIN, &mode);
@@ -197,27 +198,27 @@ int main()
 	
 
 	int x = 0;
-	int y =0;
+	int y = 0;
 	while (1)
 	{
-		printf("확인할 위치의 x, y좌표를 입력하세요.\n");
-		printf("음수를 입력하면 게임이 종료됩니다.\n");
-		printf("x 좌표 입력 : ");
+		// printf("확인할 위치의 x, y좌표를 입력하세요.\n");
+		// printf("음수를 입력하면 게임이 종료됩니다.\n");
+		// printf("x 좌표 입력 : ");
 		click(&xx, &yy, &lr);
 		printf("%2d %2d %2d\n", xx, yy, lr);
 		// 음수가 입력되었으면 게임을 종료
 
-		printf("y 좌표 입력 : ");
+		// printf("y 좌표 입력 : ");
 		// 음수가 입력되었으면 게임 종료
 
 		// 위치 정보를 제대로 입력했는지 확인
-		if (x < X_COUNT && y < Y_COUNT)
+		if (xx < X_COUNT && yy < Y_COUNT)
 		{
 			// 이미 확인한 위치인지 체크
-			if (check_table[y][x] == 0)
+			if (check_table[yy][xx] == 0)
 			{
 				// 사용자가 폭탄을 선택한 경우
-				if (mine_table[y][x] == '*')
+				if (mine_table[yy][xx] == '*')
 				{
 					printf("폭탄을 선택했습니다. 미션 실패!\n\n");
 					break; // 게임 중단
