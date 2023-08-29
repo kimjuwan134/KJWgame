@@ -1,245 +1,79 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <memory.h>
 #include <windows.h>
+#include <time.h>
+#include <conio.h>
 
-#define MINE_COUNT 7
-#define X_COUNT 6
-#define Y_COUNT 6
+#define LEFT 75
+#define RIGHT 77
 
+struct Player
+{
+	int x, y;
+	const char* shape;
+};
 
+struct Enemy
+{
+	int x, y;
+	const char* shape;
+};
 
-INPUT_RECORD rec;
-DWORD dwNOER;
-HANDLE CIN = 0;
+void gotoXY(int x, int y)
+{
+	COORD position = { x, y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+}
 
-void click(int* xx, int* yy, int* lr) {
-	while (1)
+void Keyboard(Player* player)
+{
+	char key = 0;
+
+	if (_kbhit())
 	{
-		ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), &rec, 1, &dwNOER); // 콘솔창 입력을 받아들임.
-		if (rec.EventType == MOUSE_EVENT) {// 마우스 이벤트일 경우
+		key = _getch();
 
-			if (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) { // 좌측 버튼이 클릭되었을 경우
-				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X값 받아옴
-				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y값 받아옴
+		if (key == -32)
+		{
+			key = _getch();
+		}
 
-				*xx = mouse_x; //x값을 넘김
-				*yy = mouse_y; //y값을 넘김
-				*lr = 1; //마우스 클릭상태를 넘김
-
-				break;
-			}
-			else if (rec.Event.MouseEvent.dwButtonState & RIGHTMOST_BUTTON_PRESSED) { // 우측 버튼이 클릭되었을 경우
-				int mouse_x = rec.Event.MouseEvent.dwMousePosition.X; // X값 받아옴
-				int mouse_y = rec.Event.MouseEvent.dwMousePosition.Y; // Y값 받아옴
-
-				*xx = mouse_x; //x값을 넘김
-				*yy = mouse_y; //y값을 넘김
-				*lr = 2; //마우스 클릭상태를 넘김
-
-				break;
-			}
+		switch (key)
+		{
+		case LEFT:if (player->x <= 0)return;
+			player->x -= 2;
+			break;
+		case RIGHT:if (player->x >= 28)return;
+			player->x += 2;
+			break;
 		}
 	}
 }
 
-void CreateMineTable(char mine_table[][X_COUNT], char check_table[][X_COUNT])
+int RandomX()
 {
-	int x, y, mine_count;
-	// mine 정보를 저장할 메모리에 모두 0을 채운다.
+	srand(time(NULL));
 
-	memset(mine_table, 0, Y_COUNT * X_COUNT);
-	// 사용자의 선택 정보를 저장할 메모리에 모두 0을 채운다.
-	
-	memset(check_table, 0, Y_COUNT * X_COUNT);
+	int x = rand() % 31;
 
-	// 폭탄을 MINE_COUNT개만큼 생성한다.
-	for (mine_count = 0; mine_count < MINE_COUNT; mine_count++)
+	if (x % 2 == 1)
 	{
-		// 난수를 사용하여 폭탄이 위치할 곳을 생성한다.
-		x = rand() % X_COUNT;
-		y = rand() % Y_COUNT;
-		// 폭탄이 설치된 곳이 아니라면 폭탄을 설치하고 이미 설치된 곳이라면
-		// 폭탄의 수를 줄여서 다시 시도하게 된다.
-		if (mine_table[y][x] == 0)
-		{
-			mine_table[y][x] = '*';
-		}
-		else mine_count--;
+		x += 1;
 	}
 
-	for (y = 0; y < Y_COUNT; y++)
-	{
-		for (x = 0; x < X_COUNT; x++)
-		{
-			// 폭탄이 아니라면 인접한 위치에 폭탄이 몇개 있는지 체크한다.
-			if (mine_table[y][x] == 0)
-			{
-				// 폭탄의 수를 초기화한다.
-				mine_count = 0;
-				// 현재 위치 (C)를 중심으로 총 8방향의 위치에 폭탄이 몇개 있는지 체크한다.
-				// 1, 2, 3
-				// 4, C, 5
-				// 6, 7, 8
-				
-				if ((y - 1) >= 0)
-				{
-					// 음수가 나오지 않게 체크한다.
-					// 1, 2, 3번 항목을 체크한다.
-					if ((x - 1) >= 0 && mine_table[y - 1][x - 1] == '*')
-					{
-						mine_count++;
-					}
-					if (mine_table[y - 1][x] == '*')
-					{
-						mine_count++;
-					}
-					if ((x + 1) < X_COUNT && mine_table[y - 1][x + 1] == '*')
-					{
-						mine_count++;
-					}
-				}
-				// 4, 5 항목을 체크한다.
-				if ((x - 1) >= 0 && mine_table[y][x - 1] == '*')
-				{
-					mine_count++;
-				}
-				if ((x + 1) < X_COUNT && mine_table[y][x + 1] == '*')
-				{
-					mine_count++;
-				}
-				// 6, 7, 8번 항목을 체크한다.
-				if ((y + 1) < Y_COUNT)
-				{
-					// 범위를 벗어나지 않게 체크한다.
-					if ((x - 1) >= 0 && mine_table[y + 1][x - 1] == '*')
-					{
-						mine_count++;
-					}
-					if (mine_table[y + 1][x] == '*')
-					{
-						mine_count++;
-					}
-					if ((x + 1) < X_COUNT && mine_table[y + 1][x + 1] == '*')
-					{
-						mine_count++;
-					}
-				}
-
-				// 계산된 폭탄 수를 정수에서 문자로 변경해서 현재 위치에 대입한다.
-				// 예를 들어, 5 라면 '5'로 저장한다.
-				mine_table[y][x] = '0' + mine_count;
-			}
-		}
-	}
-}
-
-void ShowMineTable(char mine_table[][X_COUNT])
-{
-	printf("\n"); // 줄 바꿈
-	for (int y = 0; y < Y_COUNT; y++)
-	{
-		// 한 줄의 정보를 출력
-		for (int x = 0; x < X_COUNT; x++)
-		{
-			printf("%c", mine_table[y][x]);	
-		}
-		printf("\n"); // 줄 바꿈
-	}
-	printf("\n"); // 줄 바꿈
-}
-
-void ShowCurrentState(char mine_table[][X_COUNT], char check_table[][X_COUNT])
-{
-	printf("\n"); // 줄 바꿈
-	for (int y = 0; y < Y_COUNT; y++)
-	{
-		// 한 줄의 정보를 출력
-		for (int x = 0; x < X_COUNT; x++)
-		{
-			if (check_table[y][x]) 
-				printf("%c", mine_table[y][x]);
-			else
-				printf("■");
-		}
-		printf("\n"); // 줄 바꿈
-	}
-	printf("\n"); // 줄 바꿈
+	return x;
 }
 
 int main()
 {
-	// 폭탄이 설치된 정보를 저장할 변수
-	char mine_table[Y_COUNT][X_COUNT];
+	system("mode con cols=5 lines=5");
 
-	// 사용자가 선택한 위치를 기억할 변수
-	char check_table[Y_COUNT][X_COUNT];
+	Player player = { 2,4,"■" };
+	Enemy enemy = { 3,1,"□" };
 
-	// 현재 시간을 기준으로 난수를 설정
-	srand((unsigned)time(NULL));
-
-	// 폭탄 설치 정보를 구성
-	CreateMineTable(mine_table, check_table);
-	
-	// 선택 정보를 반영하여 지뢰 정보를 출력
-	// ■ 문자로 출력된 것은 아직 확인이 안된 항목
-	ShowCurrentState(mine_table, check_table);
-	
-	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
-	//마우스 입력모드로 바꿈
-
-	DWORD mode;
-	CIN = GetStdHandle(STD_INPUT_HANDLE); //마우스 재활성화
-	GetConsoleMode(CIN, &mode);
-	SetConsoleMode(CIN, mode | ENABLE_MOUSE_INPUT);
-	int xx, yy, lr;
-
-	
-
-	int x = 0;
-	int y = 0;
 	while (1)
 	{
-		// printf("확인할 위치의 x, y좌표를 입력하세요.\n");
-		// printf("음수를 입력하면 게임이 종료됩니다.\n");
-		// printf("x 좌표 입력 : ");
-		click(&xx, &yy, &lr);
-		printf("%2d %2d %2d\n", xx, yy, lr);
-		// 음수가 입력되었으면 게임을 종료
-
-		// printf("y 좌표 입력 : ");
-		// 음수가 입력되었으면 게임 종료
-
-		// 위치 정보를 제대로 입력했는지 확인
-		if (xx < X_COUNT && yy < Y_COUNT)
-		{
-			// 이미 확인한 위치인지 체크
-			if (check_table[yy][xx] == 0)
-			{
-				// 사용자가 폭탄을 선택한 경우
-				if (mine_table[yy][xx] == '*')
-				{
-					printf("폭탄을 선택했습니다. 미션 실패!\n\n");
-					break; // 게임 중단
-				}
-				else
-				{
-					// 선택했음을 설정
-					check_table[y][x] = 1;
-					// 선택 정보를 반영하여 지뢰 정보를 출력
-					// @ 문자로 출력된 것은 아직 확인이 안된 항목
-					ShowCurrentState(mine_table, check_table);
-				}
-			}
-			else printf("이미 확인한 위치입니다.\n\n");
-		}
-		else printf("잘못된 위치를 입력했습니다.\n\n");
+		Keyboard(&player);
 	}
-
-	 // 설치 정보를 확인
-	ShowMineTable(mine_table);
-
-
+	
 	return 0;
 }
