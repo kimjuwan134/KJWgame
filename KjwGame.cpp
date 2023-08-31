@@ -9,11 +9,10 @@
 #define RIGHT 77
 #define CAR_WIDTH 12
 #define CAR_HEIGHT 6
-#define MAP_WIDTH 1
-#define MAP_HEIGHT 30
+#define MAP_HEIGHT 37
 
 char car[CAR_HEIGHT][CAR_WIDTH];
-char map[MAP_HEIGHT][MAP_WIDTH];
+char map[MAP_HEIGHT];
 
 void gotoXY(int x, int y)
 {
@@ -21,49 +20,36 @@ void gotoXY(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
 }
 
+struct Player
+{
+	int x, y;
+};
+
+struct Enemy
+{
+	int x, y;
+};
+
 void MapInit()
 {
-	strcpy(map[0], "び");
-	strcpy(map[1], "び");
-	strcpy(map[2], "び");
-	strcpy(map[3], "び");
-	strcpy(map[4], "び");
-	strcpy(map[5], "び");
-	strcpy(map[6], "び");
-	strcpy(map[7], "び");
-	strcpy(map[8], "び");
-	strcpy(map[9], "び");
-	strcpy(map[10], "び");
-	strcpy(map[11], "び");
-	strcpy(map[12], "び");
-	strcpy(map[13], "び");
-	strcpy(map[14], "び");
-	strcpy(map[15], "び");
-	strcpy(map[16], "び");
-	strcpy(map[17], "び");
-	strcpy(map[18], "び");
-	strcpy(map[19], "び");
-	strcpy(map[20], "び");
-	strcpy(map[21], "び");
-	strcpy(map[22], "び");
-	strcpy(map[23], "び");
-	strcpy(map[24], "び");
-	strcpy(map[25], "び");
-	strcpy(map[26], "び");
-	strcpy(map[27], "び");
-	strcpy(map[28], "び");
-	strcpy(map[29], "び");
-
+	for (int i = 0; i < MAP_HEIGHT; i++)
+	{
+		map[i] = 'l';
+	}
 }
 
 void MapRender()
 {
 	for (int i = 0; i < MAP_HEIGHT; i++)
 	{
-		for (int j = 0; j < MAP_WIDTH; j++)
-		{
-			printf("%c", map[i][j]);
-		}
+		gotoXY(40, i);
+		printf("%c", map[i]);
+		printf("\n");
+	}
+	for (int i = 0; i < MAP_HEIGHT; i++)
+	{
+		gotoXY(100, i);
+		printf("%c", map[i]);
 		printf("\n");
 	}
 }
@@ -78,35 +64,15 @@ void CarInit()
 	strcpy(car[5], "び_____び");
 }
 
-void CarRender()
+void CarRender(Player * player)
 {
-	for (int i = 0; i <= 5; i++)
+	for (int i = 0; i <= player->x; i++)
 	{
-		gotoXY(5, i+5);
+		gotoXY(player->x, i+player->y);
 		printf("%s", car[i]);
-	}
-
-	for (int i = 0; i < CAR_HEIGHT; i++)
-	{
-		for (int j = 0; j < CAR_WIDTH; j++)
-		{
-			//printf("%c", car[i][j]);
-		}
-
 		printf("\n");
 	}
 }
-
-struct Player
-{
-	int x, y;
-};
-
-struct Enemy
-{
-	int x, y;
-};
-
 
 void Keyboard(Player* player)
 {
@@ -124,12 +90,13 @@ void Keyboard(Player* player)
 		switch (key)
 		{
 		case LEFT:if (player->x <= 0)return;
-			player->x -= 2;
+			player->x -= 30;
 			break;
-		case RIGHT:if (player->x >= 199)return;
-			player->x += 2;
+		case RIGHT:if (player->x >= 200)return;
+			player->x += 30;
 			break;
 		}
+		system("cls");
 	}
 }
 
@@ -156,25 +123,22 @@ int main()
 {
 	system("mode con cols=140 lines=38");
 
+	Player player = { 60,40 };
+	Enemy enemy = { 3,1 };
+
 	CarInit();
 	MapInit();
 
-	Player player = { 5,5 };
-	Enemy enemy = { 3,1 };
-	
-	// gotoXY(3, 3);
-	// MapRender();
-	
-	CarRender();
-	
 
-	// printf("%s", player.shape);
-
-	//while (1)
-	//{
-	//	Keyboard(&player);
-	//
-	//}
+	
+	
+	while (1)
+	{
+		MapRender();
+		//CarRender(&player);
+		//Keyboard(&player);
+		//Sleep(100);
+	}
 	
 	return 0;
 }
