@@ -66,9 +66,19 @@ void CarInit()
 
 void CarRender(Player * player)
 {
-	for (int i = 0; i <= player->x; i++)
+	for (int i = 0; i <= CAR_HEIGHT - 1; i++)
 	{
 		gotoXY(player->x, i+player->y);
+		printf("%s", car[i]);
+		printf("\n");
+	}
+}
+
+void EnemyRender(Enemy* enemy)
+{
+	for (int i = 0; i <= CAR_HEIGHT - 1; i++)
+	{
+		gotoXY(enemy->x, i + enemy->y);
 		printf("%s", car[i]);
 		printf("\n");
 	}
@@ -89,14 +99,35 @@ void Keyboard(Player* player)
 
 		switch (key)
 		{
-		case LEFT:if (player->x <= 0)return;
-			player->x -= 30;
+		case LEFT:if (player->x <= 51)return;
+			player->x -= 15;
 			break;
-		case RIGHT:if (player->x >= 200)return;
-			player->x += 30;
+		case RIGHT:if (player->x >= 81)return;
+			player->x += 15;
 			break;
 		}
 		system("cls");
+	}
+}
+
+void Create(Enemy* enemy)
+{
+	static int index = 0;
+
+	for (int i = 0; i < index; i++)
+	{
+		gotoXY(enemy[i].x, enemy[i].y++);
+		EnemyRender(&enemy[i]);
+	}
+
+	int random = rand() % 5;
+	
+	if (random == 4)
+	{
+		if (index <= 2)
+		{
+			index++;
+		}
 	}
 }
 
@@ -104,41 +135,57 @@ int RandomX()
 {
 	srand(time(NULL));
 
-	int x = rand() % 200;
+	int x = rand() % 3;
 
-	if (x % 2 == 1)
+	int randomX = 66;
+
+	switch (x)
 	{
-		x += 1;
+	case 0: randomX -= 15;
+		break;
+	case 1 : randomX = 66;
+		break;
+	case 2 : randomX += 15;
+		break;
 	}
+   
 
-	return x;
+	return randomX;
 }
-	//  _____ 
-	// /     \
-	//び     び
-	//び     び
-	//び     び
-	//び_____び
+
 int main()
 {
 	system("mode con cols=140 lines=38");
 
-	Player player = { 60,40 };
-	Enemy enemy = { 3,1 };
+	Player player = {66,30 };
+	Enemy enemy[3] = {RandomX(),1};
 
 	CarInit();
 	MapInit();
 
+	enemy[0].y = 0;
+	enemy[0].x = RandomX();
 
-	
-	
 	while (1)
 	{
+		Keyboard(&player);
+		
+		Create(enemy);
+
+
+		if (player.x == enemy[0].x && player.y == enemy[0].y)
+		{
+			break;
+		}
+		CarRender(&player);
+		EnemyRender(&enemy[0]);
 		MapRender();
-		//CarRender(&player);
-		//Keyboard(&player);
-		//Sleep(100);
+		
 	}
+
+
+		//Sleep(100);
+	
 	
 	return 0;
 }
