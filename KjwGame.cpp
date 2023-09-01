@@ -5,8 +5,10 @@
 #include <time.h>
 #include <conio.h>
 
+#define UP 72
 #define LEFT 75
 #define RIGHT 77
+#define DOWN 80
 #define CAR_WIDTH 12
 #define CAR_HEIGHT 6
 #define MAP_HEIGHT 37
@@ -105,6 +107,8 @@ void Keyboard(Player* player)
 		case RIGHT:if (player->x >= 81)return;
 			player->x += 15;
 			break;
+		case UP:return;
+		case DOWN:return;
 		}
 		system("cls");
 	}
@@ -148,7 +152,6 @@ int RandomX()
 	case 2 : randomX += 15;
 		break;
 	}
-   
 
 	return randomX;
 }
