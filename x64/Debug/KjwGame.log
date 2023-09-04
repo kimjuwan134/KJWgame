@@ -1,5 +1,4 @@
-﻿  KjwGame.cpp
-C:\Users\Admin\Desktop\KJWgame\KjwGame.cpp(21,21): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
-C:\Users\Admin\Desktop\KJWgame\KjwGame.cpp(21,24): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
-C:\Users\Admin\Desktop\KJWgame\KjwGame.cpp(140,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  KjwGame.vcxproj -> C:\Users\Admin\Desktop\KJWgame\x64\Debug\KjwGame.exe
+﻿  Source.cpp
+C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(9,8): warning C4804: '<': unsafe use of type 'bool' in operation
+C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(9,22): warning C4804: '<': unsafe use of type 'bool' in operation
+  KjwGame.vcxproj -> C:\Users\Administrator\Desktop\김주완1\KJWgame\x64\Debug\KjwGame.exe

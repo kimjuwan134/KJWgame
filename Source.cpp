@@ -2,38 +2,18 @@
 
 int main()
 {
-	int A, B, C;
+	int A, B;
 
-	scanf_s("%d %d", &A, &B);
-	scanf_s("%d", &C);
 
-	if (0 <= A <= 23 && 0 <= B <= 59 && 0 <= C <= 1000)
+	while (1)
 	{
-		if (B + C < 59)
-		{
-			B += C;
-			if (B > 59)
-			{
-				A++;
-				if (A > 23)
-				{
-					A = 0;
-				}
-			}
-		}
-		else if (B + C > 59)
-		{
-			int a = C % 60;
-			int b = C / 60;
-			A += b;
-			B = a;
+		scanf_s("%d %d", &A, &B);
 
-			if (A > 23)
-			{
-				A -= 23;
-			}
+		if (0 < A < 10 && 0 < B < 10)
+		{
+
+			printf("%d\n", A + B);
 		}
-		printf("%d %d", A, B);
 	}
 
 	return 0;
