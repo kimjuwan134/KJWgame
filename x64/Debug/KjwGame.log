@@ -1,4 +1,6 @@
-﻿  Source.cpp
-C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(9,8): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\Administrator\Desktop\김주완1\KJWgame\Source.cpp(9,22): warning C4804: '<': unsafe use of type 'bool' in operation
-  KjwGame.vcxproj -> C:\Users\Administrator\Desktop\김주완1\KJWgame\x64\Debug\KjwGame.exe
+﻿  오븐 시계.cpp
+C:\Users\Admin\Desktop\KJWgame\오븐 시계.cpp(10,8): warning C4804: '<=': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+C:\Users\Admin\Desktop\KJWgame\오븐 시계.cpp(10,24): warning C4804: '<=': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+C:\Users\Admin\Desktop\KJWgame\오븐 시계.cpp(10,40): warning C4804: '<=': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+C:\Users\Admin\Desktop\KJWgame\오븐 시계.cpp(10,53): warning C4390: ';': 제어된 빈 문이 있습니다. 이 문이 필요합니까?
+  KjwGame.vcxproj -> C:\Users\Admin\Desktop\KJWgame\x64\Debug\KjwGame.exe
