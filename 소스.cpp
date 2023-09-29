@@ -1,26 +1,39 @@
-#include<cstdio>
+#include <iostream>
 
-int arr[100];
+using namespace std;
+
 
 int main()
 {
-	int n;
-	int target;
-	int input;
-	int count = 0;
-	scanf("%d", &n);
+	int n, m, a, b;
 
-	for (int i = 0; i < n; i++) {
-		scanf("%d", arr + i);
+	cin >> n >> m;
+
+	int * arr = new int[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		arr[i] = i + 1;
 	}
 
-	scanf("%d", &target);
+	for (int i = 0; i < m; i++)
+	{
+		cin >> a >> b;
 
-	for (int i = 0; i < n; i++) {
-		if (arr[i] == target) count += 1;
+		for (int j = 0; j <= (b - a) / 2; j++)
+		{
+			int temp = 0;
+			temp = arr[j + a - 1];
+			arr[j + a - 1] = arr[b - j - 1];
+			arr[b - j - 1] = temp;
+		}
 	}
 
-	printf("%d\n", count);
+	for (int i = 0; i < n; i++)
+	{
+		cout << arr[i] << " ";
+	}
+
 
 	return 0;
 }
