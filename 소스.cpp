@@ -6,16 +6,12 @@ using namespace std;
 
 int main()
 {
-	int num[26] = {3,3,3,}
-	string A;
-	
-	cin >> A;
-
-
-
-
-
-
+	cout << "         ,r'\"7" << endl;
+	cout << "r`-_   ,'  ,/" << endl;
+	cout << " \\. \". L_r'" << endl;
+	cout << "   `~\\/" << endl;
+	cout << "      |" << endl;
+	cout << "      |";
 
 	return 0;
 }
