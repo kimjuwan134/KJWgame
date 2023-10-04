@@ -9,34 +9,31 @@ int main()
 
 	cin >> N;
 
-	for (int i = 0; i < 2 * N - 1; i++)
+	for (int i = 0; i < N; i++)
 	{
-		for (int j = i; j < N; j++)
+		for (int j = i; j < N - 1; j++)
 		{
 			cout << " ";
 		}
-		for (int k = N - i; k <= N + i; k++)
+		for (int k = 1; k < 2 * (i+1); k++)
 		{
 			cout << "*";
-		}
-		if (i >= N)
-		{
-			for (int j = i; j >= N; j--)
-			{
-				cout << " ";
-			}
-			for (int k = i - N; k <= N; k++)
-			{
-				cout << "*";
-			}
-		}
-		else if (i == N)
-		{
-			continue;
 		}
 		cout << endl;
 	}
 
+	for (int i = N; i < 2*N-1; i++)
+	{
+		for (int k = N; k <= i; k++)
+		{
+			cout << " ";
+		}
+		for (int j = 4; j <= 2*(2*N-i); j++)
+		{
+			cout << "*";
+		}
+		cout << endl;
+	}
 
 
 	return 0;
