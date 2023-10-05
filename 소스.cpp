@@ -5,41 +5,35 @@ using namespace std;
 
 int main()
 {
-	string str;
-	int abc[26] = { 0, };
-	int count = 0;
+	int N;
+	int result = 0;
 
-	cin >> str;
+	cin >> N;
 
-	for (int i = 0; i < str.length(); i++)
+	while (N)
 	{
-		if (str[i] < 'a') abc[str[i] - 'A']++;
-		else abc[str[i] - 'a']++;
-	}
-
-	int max = 0, max_index = 0;
-
-	for (int i = 0; i < 26; i++)
-	{
-		if (max < abc[i])
+		string str;
+		bool groupWord = true;
+		int abc[26] = { 0, };
+		cin >> str;
+		for (int i = 0; i < str.length(); i++)
 		{
-			max = abc[i];
-			max_index = i;
+			int temp = str[i] - 'a';
+			if (i != 0 && str[i - 1] != str[i])
+			{
+				if (abc[temp] != 0)
+				{
+					groupWord = false;
+					break;
+				}
+			}
+			abc[temp]++;
 		}
+		if (groupWord) result++;
+		N--;
 	}
 
-	for (int i = 0; i < 26; i++)
-	{
-		if (max == abc[i]) count++;
-	}
-
-	if (count > 1) cout << "?";
-	else cout << char(max_index + 65);
-
-
-
-
-
+	cout << result;
 
 	return 0;
 }
