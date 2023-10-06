@@ -1,39 +1,34 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 
 int main()
 {
-	int N;
-	int result = 0;
+	int max = 0;
+	int a, b;
+	int arr[9][9];
 
-	cin >> N;
-
-	while (N)
+	for (int i = 0; i < 9; i++)
 	{
-		string str;
-		bool groupWord = true;
-		int abc[26] = { 0, };
-		cin >> str;
-		for (int i = 0; i < str.length(); i++)
+		for (int j = 0; j < 9; j++)
 		{
-			int temp = str[i] - 'a';
-			if (i != 0 && str[i - 1] != str[i])
+			cin >> arr[i][j];
+
+			if (max <= arr[i][j])
 			{
-				if (abc[temp] != 0)
-				{
-					groupWord = false;
-					break;
-				}
+				max = arr[i][j];
+				a = i + 1;
+				b = j + 1;
 			}
-			abc[temp]++;
 		}
-		if (groupWord) result++;
-		N--;
 	}
 
-	cout << result;
+	cout << max << endl << a << " " << b;
+
+
+
 
 	return 0;
 }
